@@ -88,7 +88,8 @@ export const generatedData = (google) => {
         -33.91727341958453,
         151.23348314155578
       ),
-      type: "volunteer"
+      type: "volunteer",
+      title: "Need help"
     }
   ]
 }
