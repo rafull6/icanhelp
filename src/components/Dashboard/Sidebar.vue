@@ -91,7 +91,7 @@ export default {
 
       > span {
         color: #fff;
-        font-size: 10px;
+        font-size: 12px;
         text-transform: uppercase;
       }
     }
@@ -99,10 +99,16 @@ export default {
     &__filters {
       flex: 0 0 auto;
       list-style: none;
-      padding: 25px;
+      padding: 25px 25px 10px;
       margin: 0;
+      display: flex;
+      flex-wrap: wrap;
       > li {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
+        &:nth-child(odd){
+          flex: 0 0 53.4%;
+        }
+
         &:last-child {
           margin-bottom: 0;
         }

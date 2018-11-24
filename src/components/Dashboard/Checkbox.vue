@@ -34,8 +34,8 @@ export default {
     align-items: center;
     &__label {
       color: $black;
-      font-size: 15px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 400;
     }
 
     &__input {
