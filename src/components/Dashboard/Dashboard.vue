@@ -34,7 +34,7 @@ export default {
       padding: 0 25px;
       box-shadow: 0 0 15px rgba(0,0,0,0.3);
       position: relative;
-      z-index: 1;
+      z-index: 3;
     }
 
     &__body {
@@ -47,7 +47,7 @@ export default {
       background: #fff;
       flex: 0 0 350px;
       position: relative;
-      z-index: 1;
+      z-index: 4;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     }
 
