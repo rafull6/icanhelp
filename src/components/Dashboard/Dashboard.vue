@@ -5,7 +5,7 @@
     </div>
     <div class="dashboard__body">
       <sidebar class="dashboard__sidebar"/>
-      <MainContent class="dashboard__main-content"/>
+        <MainContent v-if="!this.loading" :events="this.events" class="dashboard__main-content"/>
     </div>
   </div>
 </template>
@@ -13,10 +13,31 @@
 <script>
 import Sidebar from './Sidebar';
 import MainContent from './MainContent/MainContent.vue';
+import { apiUrl } from '@/utils/urls.js';
+import axios from "axios";
 
 export default {
   name: "Dashboard",
-  components: { Sidebar, MainContent }
+  components: { Sidebar, MainContent },
+  data: () => ({
+    events: {},
+    loading: true
+  }),
+  methods: {
+    getEvents: function() {
+      axios
+      .get(`${apiUrl}/list/events`)
+      .then(response => {
+        this.events = response.data;
+        this.loading = false;
+        console.log(this.loading)
+      })
+      .catch(e => console.log(e));
+    }
+  },
+  created() {
+    this.getEvents();
+  }
 };
 </script>
 

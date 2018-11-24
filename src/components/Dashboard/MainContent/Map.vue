@@ -3,16 +3,14 @@
 </template>
 
 <script>
-import axios from "axios";
 import { style, icons } from "@/utils/map.js";
 import { geo } from "@/utils/geolocation.js";
 import { generatedData } from "@/utils/data.js";
 
 export default {
   name: "Map",
-  props: ["zoom"],
+  props: ["zoom", "events"],
   data: () => ({
-    events: {},
     myLocation: null
   }),
   methods: {
@@ -22,9 +20,10 @@ export default {
             coordinates => (this.myLocation = coordinates)
           )
         : (this.myLocation = geo.passive);
+
+        console.log(this.myLocation)
     },
     showEvents: function(events, map) {
-      console.log('events', events)
       events.forEach(event => {
         const marker = new google.maps.Marker({
           position: new google.maps.LatLng(
@@ -37,32 +36,24 @@ export default {
         });
       });
     },
-    getEvents: function(map) {
-      axios
-        .get(`http://10.250.195.40:5000/list/events`)
-        .then(response => {
-          this.showEvents(response.data, map);
-        })
-        .catch(e => console.log(e));
-    },
     renderMap: function() {
+      console.log('r', this.myLocation)
       const mapOptions = {
         zoom: parseInt(this.zoom, 10),
         center: new google.maps.LatLng(
           this.myLocation.lat,
           this.myLocation.lng
         ),
-        styles: style,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        styles: style
       };
       const mapElement = document.getElementById("map");
       const map = new google.maps.Map(mapElement, mapOptions);
-
-      this.getEvents(map);
+      this.showEvents(this.events, map);
     }
   },
   watch: {
     myLocation: function() {
+      console.log("myLocation", this.myLocation)
       this.renderMap();
     }
   },
