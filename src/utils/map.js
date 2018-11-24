@@ -139,7 +139,7 @@ export const icons = {
   default: {
     icon: {
       path: "M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0",
-      fillColor: "red",
+      fillColor: "#f03a3a",
       fillOpacity: 1,
       scale: 0.15
     }
@@ -147,7 +147,7 @@ export const icons = {
   ambulance: {
     icon: {
       path: "M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0",
-      fillColor: "green",
+      fillColor: "#285583",
       fillOpacity: 1,
       scale: 0.15
     }
@@ -155,7 +155,7 @@ export const icons = {
   volunteer: {
     icon: {
       path: "M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0",
-      fillColor: "yellow",
+      fillColor: "#12aeef",
       fillOpacity: 1,
       scale: 0.15
     }

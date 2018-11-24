@@ -16,7 +16,4 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.main-content {
-  height: 100vh;
-}
 </style>
