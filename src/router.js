@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Login from "./views/Login.vue";
-import Dashboard from "./views/Dashboard.vue";
+import Login from "./components/Login/Login.vue";
+import Dashboard from "./components/Dashboard/Dashboard.vue";
 
 Vue.use(Router);
 
