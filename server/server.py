@@ -47,11 +47,13 @@ class ParamedicByDistance(Resource):
         return get_paramedics_in_distance(es_client, lat, lon, distance)
 
 
+# TODO: update object query
 class UpdateObject(Resource):
     def post(self, object_type, object_id):
         json_data = request.get_json(force=True)
 
 
+# TODO: add object query
 class AddObject(Resource):
     def post(self, object_type):
         json_data = request.get_json(force=True)

@@ -34,8 +34,10 @@ def post_to_elastic(es_client: Elasticsearch, index_name: str, doc_type: str, da
     logging.info('POST {}:{}'.format(index_name, data_json))
     es_client.index(index=index_name, doc_type=doc_type, body=data_json)
 
+
 def generate_name():
     return random.choice(NAMES) + " " + random.choice (SURNAMES)
+
 
 def generate_location():
     return {
@@ -43,7 +45,7 @@ def generate_location():
         "lon" : random.randrange(LON_MIN, LON_MAX) / 1000000
     }
 
-# TODO: single paramedic generator
+
 def generate_paramedic():
     paramedic = {
         "name" : generate_name(),
@@ -57,7 +59,6 @@ def generate_paramedic():
     return paramedic
 
 
-# TODO: single event generator
 def generate_event():
     timestamp = datetime.datetime.now() + datetime.timedelta(seconds=random.randint(-3600,3600));
     event = {
