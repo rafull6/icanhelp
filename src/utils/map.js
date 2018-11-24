@@ -1,4 +1,4 @@
-export const mapStyle = [{
+export const style = [{
     featureType: "water",
     elementType: "geometry",
     stylers: [{
@@ -104,11 +104,14 @@ export const mapStyle = [{
   {
     featureType: "transit",
     elementType: "geometry",
-    stylers: [{
-      color: "#f2f2f2"
-    }, {
-      lightness: 19
-    }]
+    stylers: [
+      {
+        color: "#f2f2f2"
+      },
+      {
+        lightness: 19
+      }
+    ]
   },
   {
     featureType: "administrative",
@@ -130,4 +133,31 @@ export const mapStyle = [{
       weight: 1.2
     }]
   }
-]
+];
+
+export const icons = {
+  default: {
+    icon: {
+      path: "M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0",
+      fillColor: "red",
+      fillOpacity: 1,
+      scale: 0.15
+    }
+  },
+  ambulance: {
+    icon: {
+      path: "M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0",
+      fillColor: "green",
+      fillOpacity: 1,
+      scale: 0.15
+    }
+  },
+  volunteer: {
+    icon: {
+      path: "M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0",
+      fillColor: "yellow",
+      fillOpacity: 1,
+      scale: 0.15
+    }
+  }
+};
