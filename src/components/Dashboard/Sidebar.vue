@@ -56,8 +56,6 @@ export default {
   }),
   name: "Sidebar",
   components: { Checkbox },
-  methods: {
-  },
   created() {
     EventBus.$on('checkbox_change', (event, id) => {
       const name = event.target.name;
@@ -77,7 +75,7 @@ export default {
     display: flex;
     flex-direction: column;
     &__head {
-      background: $blue;
+      background: linear-gradient(to right, $ligher-blue, $blue);
       flex: 0 0 auto;
       display: flex;
       align-items: center;
@@ -92,7 +90,7 @@ export default {
       }
 
       > span {
-        color: #97e0ff;
+        color: #fff;
         font-size: 10px;
         text-transform: uppercase;
       }
@@ -125,7 +123,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 25px 32px 25px 25px;
+        padding: 20px 20px 20px 25px;
         &:after {
           content: '';
           background: $red;
@@ -136,7 +134,7 @@ export default {
         }
 
         &:nth-child(even) {
-          background: $light-blue;
+          background: $gray;
         }
 
         &.volunteer:after {
@@ -146,6 +144,27 @@ export default {
         &.ambulance:after {
           background: $blue;
         }
+      }
+
+      /* width */
+      &::-webkit-scrollbar {
+          width: 12px;
+      }
+
+      /* Track */
+      &::-webkit-scrollbar-track {
+          background: #ececec; 
+      }
+
+      /* Handle */
+      &::-webkit-scrollbar-thumb {
+          background: #d5d5d5; 
+          border-radius: 12px;
+      }
+
+      /* Handle on hover */
+      &::-webkit-scrollbar-thumb:hover {
+          background: #c0c0c0; 
       }
     }
   }
