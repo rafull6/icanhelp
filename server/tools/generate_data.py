@@ -53,7 +53,7 @@ def generate_paramedic():
         "rating" : random.randrange(1,5),
         "specialization" : random.choice(["sercownik", "kostnik", "strazak", "policjant"]) ,
         "event_id" : "",
-        "type" :  PARAMEDIC_TYPES[0] if random.random() > 0.9 else PARAMEDIC_TYPES[1]
+        "type" :  PARAMEDIC_TYPES[0] if random.random() > 0.9 else PARAMEDIC_TYPES[1],
         "phone" : str(random.randint(1e9,9e9))
 
     }
