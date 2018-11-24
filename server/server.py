@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
+from elasticsearch import Elasticsearch
+
 from flask import Flask, request
 from flask_restful import Resource, Api
 
 
+es_client = Elasticsearch(host='10.250.195.40', port=9200)
 app = Flask(__name__)
 api = Api(app)
 
