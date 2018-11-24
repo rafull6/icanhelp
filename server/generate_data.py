@@ -11,6 +11,13 @@ PARAMEDICS_INDEX = 'paramedics'
 PARAMEDIC_DOC_TYPE = 'paramedic'
 EVENTS_INDEX = 'events'
 EVENT_DOC_TYPE = 'event'
+NAMES = ["Julia","Zuzanna", "Maja","Alicja", "Maria", "Jakub", "Jan", "Szymon", "Bartosz", "Dawid"]
+SURNAMES = ["Nowak", "Wojcik", "Kowalczyk", "Wozniak", "Mazur", "Krawczyk", "Wieczorek", "Adamczyk", "Dudek", "Pawlak"]
+PARAMEDIC_TYPES = ["ambulance", "human"]
+LAT_MIN = 52192740
+LON_MIN = 20930010
+LAT_MAX = 52295380
+LON_MAX = 21126760
 
 
 def purge_indices(es_client: Elasticsearch):
@@ -26,10 +33,26 @@ def post_to_elastic(es_client: Elasticsearch, index_name: str, doc_type: str, da
     logging.info('POST {}:{}'.format(index_name, data_json))
     es_client.index(index=index_name, doc_type=doc_type, body=data_json)
 
+def generate_name():
+    return random.choice(NAMES) + " " + random.choice (SURNAMES)
+
+def generate_localization():
+    return {
+        "lat" : random.randrange(LAT_MIN, LAT_MAX) / 1000000,
+        "lon" : random.randrange(LON_MIN, LON_MAX) / 1000000
+    }
 
 # TODO: single paramedic generator
 def generate_paramedic():
-    paramedic = {}
+    paramedic = {
+        "name" : generate_name(),
+        "localization" : generate_localization(),
+        "rating" : random.randrange(1,5),
+        "specialization" : random.choice(["sercownik", "kostnik", "strazak", "policjant"]) ,
+        "event_id" : "",
+        "type" :  PARAMEDIC_TYPES[0] if random.random() > 0.9 else PARAMEDIC_TYPES[1]
+
+    }
     return paramedic
 
 
