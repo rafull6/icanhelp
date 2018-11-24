@@ -12,12 +12,14 @@ api = Api(app)
 
 
 """
-GET /list/<object_type>
-GET /paramedic/<paramedic_id>
-GET /event/<event_id>
-GET /by_distance/<distance>
-POST /update/<object_type>/<object_id> (+ json)
-POST /add/<object_type> (+ json)
+GET /list/<index_name> - returns list of (paramedics/events)<index_name>
+GET /paramedic/<paramedic_id> - returns paramedic (single element list) with given _id<paramedic_id>
+GET /event/<event_id> - returns event with given _id<event_id>
+GET /by_distance/<distance> - (+ json) returns paramedics with distance lower than <distance>km to location specified in JSON:
+                                                    {"location": { "lat": x, "lon": y }}
+POST /update/<object_type>/<object_id> (+ json) - updates (paramedic/event)<object_type> with _id<object_id> with given JSON:
+                                                    {"param_to_update": updated_value}
+POST /add/<object_type> (+ json) - adds (paramedic/event)<object_type> to index with parameters from JSON
 """
 
 
