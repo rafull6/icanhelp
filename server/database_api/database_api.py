@@ -16,7 +16,7 @@ def get_object(es_client, index_name, object_index):
     query = {
         "query": {
             "terms": {
-                "_id" : object_index
+                "_id": [object_index]
             }
         }
     }

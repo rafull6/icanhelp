@@ -3,6 +3,7 @@ from elasticsearch import Elasticsearch
 
 from flask import Flask, request
 from flask_restful import Resource, Api
+from database_api.database_api import *
 
 
 es_client = Elasticsearch(host='10.250.195.40', port=9200)
@@ -21,18 +22,18 @@ POST /add/<object_type> (+ json)
 
 
 class ObjectsList(Resource):
-    def get(self, object_type):
-        pass
+    def get(self, index_name):
+        return get_objects_list(es_client,index_name)
 
 
 class GetParamedicById(Resource):
     def get(self, paramedic_id):
-        pass
+        return get_object(es_client,"paramedics", paramedic_id)
 
 
 class GetEventById(Resource):
     def get(self, event_id):
-        pass
+        return get_object(es_client, "events", event_id)
 
 
 class ParamedicByDistance(Resource):
