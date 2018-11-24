@@ -58,9 +58,8 @@ class UpdateObject(Resource):
             index_name = 'events'
         else:
             return { 'result': False }
-        result = update_doc(es_client, index_name=index_name, doc_id=object_id, update_data=json_data)
+        result = update_doc(es_client, index_name=index_name, doc_type=object_type, doc_id=object_id, update_data=json_data)
         return { 'result': result }
-
 
 
 class AddObject(Resource):

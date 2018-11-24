@@ -42,8 +42,11 @@ def get_object(es_client, index_name, object_index):
     return results
 
 
-def update_doc(es_client, index_name, doc_id, update_data):
-    result = es_client.update(index=index_name, id=doc_id, body=update_data)
+def update_doc(es_client, index_name, doc_type, doc_id, update_data):
+    update_doc = {
+        'doc': update_data
+    }
+    result = es_client.update(index=index_name, doc_type=doc_type, id=doc_id, body=update_doc)
     return True if result.get('result', '') == 'updated' else False
 
 
