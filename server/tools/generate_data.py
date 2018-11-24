@@ -37,7 +37,7 @@ def post_to_elastic(es_client: Elasticsearch, index_name: str, doc_type: str, da
 def generate_name():
     return random.choice(NAMES) + " " + random.choice (SURNAMES)
 
-def generate_localization():
+def generate_location():
     return {
         "lat" : random.randrange(LAT_MIN, LAT_MAX) / 1000000,
         "lon" : random.randrange(LON_MIN, LON_MAX) / 1000000
@@ -47,7 +47,7 @@ def generate_localization():
 def generate_paramedic():
     paramedic = {
         "name" : generate_name(),
-        "localization" : generate_localization(),
+        "location" : generate_location(),
         "rating" : random.randrange(1,5),
         "specialization" : random.choice(["sercownik", "kostnik", "strazak", "policjant"]) ,
         "event_id" : "",
@@ -61,7 +61,7 @@ def generate_paramedic():
 def generate_event():
     timestamp = datetime.datetime.now() + datetime.timedelta(seconds=random.randint(-3600,3600));
     event = {
-        "localization" : generate_localization(),
+        "location" : generate_location(),
         "status" : "",
         "event_type" : "",
         "description" : "",

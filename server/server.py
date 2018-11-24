@@ -38,7 +38,13 @@ class GetEventById(Resource):
 
 class ParamedicByDistance(Resource):
     def get(self, distance):
-        pass
+        json_data = request.get_json(force=True)
+        location = json_data.get('location', {})
+        lat = location.get('lat', None)
+        lon = location.get('lon', None)
+        if lat is None or lon is None:
+            return {}
+        return get_paramedics_in_distance(es_client, lat, lon, distance)
 
 
 class UpdateObject(Resource):
@@ -51,7 +57,7 @@ class AddObject(Resource):
         json_data = request.get_json(force=True)
 
 
-api.add_resource(ObjectsList, '/list/<object_type>')
+api.add_resource(ObjectsList, '/list/<index_name>')
 api.add_resource(GetParamedicById, '/paramedic/<paramedic_id>')
 api.add_resource(GetEventById, '/event/<event_id>')
 api.add_resource(ParamedicByDistance, '/by_distance/<distance>')
