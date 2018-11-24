@@ -6,17 +6,18 @@
     </div>
     <div class="dashboard__body">
       <sidebar class="dashboard__sidebar"/>
-      <div class="dashboard__main-content"></div>
+      <MainContent class="dashboard__main-content"/>
     </div>
   </div>
 </template>
 
 <script>
 import Sidebar from './Sidebar';
+import MainContent from './MainContent/MainContent.vue';
 
 export default {
   name: "Dashboard",
-  components: { Sidebar }
+  components: { Sidebar, MainContent }
 };
 </script>
 
