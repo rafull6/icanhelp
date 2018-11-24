@@ -2,7 +2,6 @@
   <div class="dashboard">
     <div class="dashboard__head">
       <img class="login__logo" alt="I Can Help" src="@/assets/logo.png"/>
-      <div class="dashboard__avatar"><img src="@/assets/avatar.png"/></div>
     </div>
     <div class="dashboard__body">
       <sidebar class="dashboard__sidebar"/>
@@ -35,24 +34,21 @@ export default {
       padding: 0 25px;
       box-shadow: 0 0 15px rgba(0,0,0,0.3);
       position: relative;
-    }
-
-    &__avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      overflow: hidden;
+      z-index: 3;
     }
 
     &__body {
       flex: 1 1 auto;
       display: flex;
+      overflow: hidden;
     }
 
     &__sidebar {
       background: #fff;
       flex: 0 0 350px;
       position: relative;
+      z-index: 4;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     }
 
     &__main-content {

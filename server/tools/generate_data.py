@@ -53,7 +53,8 @@ def generate_paramedic():
         "rating" : random.randrange(1,5),
         "specialization" : random.choice(["sercownik", "kostnik", "strazak", "policjant"]) ,
         "event_id" : "",
-        "type" :  PARAMEDIC_TYPES[0] if random.random() > 0.9 else PARAMEDIC_TYPES[1]
+        "type" :  PARAMEDIC_TYPES[0] if random.random() > 0.9 else PARAMEDIC_TYPES[1],
+        "phone" : str(random.randint(1e9,9e9))
 
     }
     return paramedic
@@ -63,8 +64,8 @@ def generate_event():
     timestamp = datetime.datetime.now() + datetime.timedelta(seconds=random.randint(-3600,3600));
     event = {
         "location" : generate_location(),
-        "status" : "",
-        "event_type" : "",
+        "status" : "default",
+        "event_type" : random.choice(["heart attack","accident","epilepsy","choking","haemorrhage","fracture"]),
         "description" : "",
         "timestamp" : timestamp
     }

@@ -3,11 +3,14 @@ from elasticsearch import Elasticsearch
 
 from flask import Flask, request
 from flask_restful import Resource, Api
+from flask_cors import CORS
+
 from database_api.database_api import *
 
 
 es_client = Elasticsearch(host='10.250.195.40', port=9200)
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 
@@ -84,4 +87,4 @@ api.add_resource(AddObject, '/add/<object_type>')
 
 
 if __name__ == '__main__':
-    app.run(port='5000')
+    app.run(host='10.250.195.40', port='5000')

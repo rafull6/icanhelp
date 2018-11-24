@@ -8,7 +8,8 @@ PARAMEDICS_INDEX_SETTINGS = {
                 'rating': { 'type': 'integer' },
                 'specialization': { 'type': 'text' },
                 'event_id': { 'type': 'text' },
-                'type': { 'type': 'text' }
+                'type': { 'type': 'text' },
+                'phone': { 'type': 'text' }
             }
         }
     }
