@@ -12,23 +12,25 @@ api = Api(app)
 
 
 """
-GET /list/<object_type>
-GET /paramedic/<paramedic_id>
-GET /event/<event_id>
-GET /by_distance/<distance>
-POST /update/<object_type>/<object_id> (+ json)
-POST /add/<object_type> (+ json)
+GET /list/<index_name> - returns list of (paramedics/events)<index_name>
+GET /paramedic/<paramedic_id> - returns paramedic (single element list) with given _id<paramedic_id>
+GET /event/<event_id> - returns event with given _id<event_id>
+GET /by_distance/<distance> - (+ json) returns paramedics with distance lower than <distance>km to location specified in JSON:
+                                                    {"location": { "lat": x, "lon": y }}
+POST /update/<object_type>/<object_id> (+ json) - updates (paramedic/event)<object_type> with _id<object_id> with given JSON:
+                                                    {"param_to_update": updated_value}
+POST /add/<object_type> (+ json) - adds (paramedic/event)<object_type> to index with parameters from JSON
 """
 
 
 class ObjectsList(Resource):
     def get(self, index_name):
-        return get_objects_list(es_client,index_name)
+        return get_objects_list(es_client, index_name)
 
 
 class GetParamedicById(Resource):
     def get(self, paramedic_id):
-        return get_object(es_client,"paramedics", paramedic_id)
+        return get_object(es_client, "paramedics", paramedic_id)
 
 
 class GetEventById(Resource):
@@ -38,20 +40,42 @@ class GetEventById(Resource):
 
 class ParamedicByDistance(Resource):
     def get(self, distance):
-        pass
+        json_data = request.get_json(force=True)
+        location = json_data.get('location', {})
+        lat = location.get('lat', None)
+        lon = location.get('lon', None)
+        if lat is None or lon is None:
+            return {}
+        return get_paramedics_in_distance(es_client, lat, lon, distance)
 
 
 class UpdateObject(Resource):
     def post(self, object_type, object_id):
         json_data = request.get_json(force=True)
+        if object_type == 'paramedic':
+            index_name = 'paramedics'
+        elif object_type == 'event':
+            index_name = 'events'
+        else:
+            return { 'result': False }
+        result = update_doc(es_client, index_name=index_name, doc_type=object_type, doc_id=object_id, update_data=json_data)
+        return { 'result': result }
 
 
 class AddObject(Resource):
     def post(self, object_type):
         json_data = request.get_json(force=True)
+        if object_type == 'paramedic':
+            index_name = 'paramedics'
+        elif object_type == 'event':
+            index_name = 'events'
+        else:
+            return { 'result': False }
+        result = add_doc(es_client, index_name, object_type, json_data)
+        return { 'result': result }
 
 
-api.add_resource(ObjectsList, '/list/<object_type>')
+api.add_resource(ObjectsList, '/list/<index_name>')
 api.add_resource(GetParamedicById, '/paramedic/<paramedic_id>')
 api.add_resource(GetEventById, '/event/<event_id>')
 api.add_resource(ParamedicByDistance, '/by_distance/<distance>')

@@ -4,7 +4,7 @@ PARAMEDICS_INDEX_SETTINGS = {
         'paramedic': {
             'properties': {
                 'name': { 'type': 'text' },
-                'localization': { 'type': 'geo_point' },
+                'location': { 'type': 'geo_point' },
                 'rating': { 'type': 'integer' },
                 'specialization': { 'type': 'text' },
                 'event_id': { 'type': 'text' },
@@ -20,7 +20,7 @@ EVENTS_INDEX_SETTINGS = {
     'mappings': {
         'event': {
             'properties': {
-                'localization': { 'type': 'geo_point' },
+                'location': { 'type': 'geo_point' },
                 'timestamp': { 'type': 'date' },
                 'status': { 'type': 'text' },
                 'event_type': { 'type': 'text' },
