@@ -1,7 +1,7 @@
 <template>
   <div class="form-field">
     <label class="form-field__label">{{ label }}</label>
-    <input class="form-field__input" type="text" :placeholder="placeholder"/>
+    <input class="form-field__input" :name="name" :type="type" :placeholder="placeholder"/>
   </div>
 </template>
 
@@ -10,6 +10,7 @@ export default {
   name: "FormField",
   props: {
     label: String,
+    name: String,
     type: String,
     placeholder: String
   }
@@ -31,7 +32,7 @@ export default {
 
     &__input {
       color: $black;
-      background: transparent;
+      background: rgba(255,255,255,0.8);
       font-family: 'Exo 2', sans-serif;
       font-size: 16px;
       font-weight: 600;
