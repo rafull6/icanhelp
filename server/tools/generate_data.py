@@ -63,8 +63,8 @@ def generate_event():
     timestamp = datetime.datetime.now() + datetime.timedelta(seconds=random.randint(-3600,3600));
     event = {
         "location" : generate_location(),
-        "status" : "",
-        "event_type" : "",
+        "status" : "default",
+        "event_type" : random.choice(["heart attack","accident","epilepsy","choking","haemorrhage","fracture"]),
         "description" : "",
         "timestamp" : timestamp
     }
