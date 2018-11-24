@@ -1,8 +1,8 @@
 <template>
   <div class="login">
     <img class="login__bg" src="@/assets/bg.jpg"/>
-    <img class="login__logo" alt="I Can Help" src="@/assets/logo.png"/>
     <form class="login__content" v-on:submit="goToDashboard($event)">
+      <img class="login__logo" alt="I Can Help" src="@/assets/big-logo.png"/>
       <form-field label='E-mail' name='email' type='email' placeholder='Wpisz swój e-mail'/>
       <form-field label='Hasło' name='password' type='password' placeholder='Wpisz swoje hasło'/>
       <blue-button class="login__button">Zaloguj się</blue-button>
@@ -55,9 +55,8 @@ export default {
     }
 
     &__logo {
-      position: absolute;
-      left: 40px;
-      top: 30px;
+      display: block;
+      margin: 0 auto 30px;
     }
 
     &__content {
