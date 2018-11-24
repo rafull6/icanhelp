@@ -3,29 +3,71 @@
 </template>
 
 <script>
+import axios from "axios";
 import { style, icons } from "@/utils/map.js";
+import { geo } from "@/utils/geolocation.js";
 import { generatedData } from "@/utils/data.js";
 
 export default {
   name: "Map",
   props: ["zoom"],
-  mounted() {
-    var mapOptions = {
-      zoom: 16,
-      center: new google.maps.LatLng(-33.91722, 151.23064),
-      styles: style
-    };
-    var mapElement = document.getElementById("map");
-    var map = new google.maps.Map(mapElement, mapOptions);
-
-    generatedData(google).forEach(function(feature) {
-      const marker = new google.maps.Marker({
-        position: feature.position,
-        icon: icons[feature.type].icon,
-        title: feature.title ? feature.title : null,
-        map: map
+  data: () => ({
+    events: {},
+    myLocation: null
+  }),
+  methods: {
+    getLocation: function(bool) {
+      this.myLocation = bool
+        ? this.$getLocation(geo.active).then(
+            coordinates => (this.myLocation = coordinates)
+          )
+        : (this.myLocation = geo.passive);
+    },
+    showEvents: function(events, map) {
+      console.log('events', events)
+      events.forEach(event => {
+        const marker = new google.maps.Marker({
+          position: new google.maps.LatLng(
+            event._source.location.lat,
+            event._source.location.lon
+          ),
+          icon: icons[event._source.status].icon,
+          title: event._source.status,
+          map: map
+        });
       });
-    });
+    },
+    getEvents: function(map) {
+      axios
+        .get(`http://10.250.195.40:5000/list/events`)
+        .then(response => {
+          this.showEvents(response.data, map);
+        })
+        .catch(e => console.log(e));
+    },
+    renderMap: function() {
+      const mapOptions = {
+        zoom: parseInt(this.zoom, 10),
+        center: new google.maps.LatLng(
+          this.myLocation.lat,
+          this.myLocation.lng
+        ),
+        styles: style,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      const mapElement = document.getElementById("map");
+      const map = new google.maps.Map(mapElement, mapOptions);
+
+      this.getEvents(map);
+    }
+  },
+  watch: {
+    myLocation: function() {
+      this.renderMap();
+    }
+  },
+  created() {
+    this.getLocation(false);
   }
 };
 </script>
@@ -65,7 +107,7 @@ export default {
   height: 100%;
 }
 
-#map div[title="active"] {
+#map div[title="default"] {
   -moz-animation: pulsate 1.5s ease-in-out infinite;
   -webkit-animation: pulsate 1.5s ease-in-out infinite;
   border: 1pt solid #fff;

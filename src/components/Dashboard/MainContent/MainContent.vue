@@ -1,6 +1,6 @@
 <template>
   <div class="main-content">
-    <Map />
+    <Map zoom="12" />
   </div>
 </template>
 
