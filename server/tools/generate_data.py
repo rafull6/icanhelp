@@ -3,6 +3,7 @@ from elasticsearch import Elasticsearch
 import argparse
 import logging
 import random
+import datetime
 
 from indices_settings import PARAMEDICS_INDEX_SETTINGS, EVENTS_INDEX_SETTINGS
 
@@ -58,8 +59,16 @@ def generate_paramedic():
 
 # TODO: single event generator
 def generate_event():
-    event = {}
+    timestamp = datetime.datetime.now() + datetime.timedelta(seconds=random.randint(-3600,3600));
+    event = {
+        "localization" : generate_localization(),
+        "status" : "",
+        "event_type" : "",
+        "description" : "",
+        "timestamp" : timestamp
+    }
     return event
+
 
 
 logger = logging.getLogger('data_generator')
