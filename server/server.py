@@ -62,10 +62,18 @@ class UpdateObject(Resource):
         return { 'result': result }
 
 
-# TODO: add object query
+
 class AddObject(Resource):
     def post(self, object_type):
         json_data = request.get_json(force=True)
+        if object_type == 'paramedic':
+            index_name = 'paramedics'
+        elif object_type == 'event':
+            index_name = 'events'
+        else:
+            return { 'result': False }
+        result = add_doc(es_client, index_name, object_type, json_data)
+        return { 'result': result }
 
 
 api.add_resource(ObjectsList, '/list/<index_name>')

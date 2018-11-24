@@ -44,4 +44,9 @@ def get_object(es_client, index_name, object_index):
 
 def update_doc(es_client, index_name, doc_id, update_data):
     result = es_client.update(index=index_name, id=doc_id, body=update_data)
-    return result.get('result', False)
+    return True if result.get('result', '') == 'updated' else False
+
+
+def add_doc(es_client, index_name, doc_type, data_json):
+    result = es_client.index(index=index_name, doc_type=doc_type, body=data_json)
+    return True if result.get('result', '') == 'created' else False
