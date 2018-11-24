@@ -25,12 +25,12 @@ POST /add/<object_type> (+ json) - adds (paramedic/event)<object_type> to index 
 
 class ObjectsList(Resource):
     def get(self, index_name):
-        return get_objects_list(es_client,index_name)
+        return get_objects_list(es_client, index_name)
 
 
 class GetParamedicById(Resource):
     def get(self, paramedic_id):
-        return get_object(es_client,"paramedics", paramedic_id)
+        return get_object(es_client, "paramedics", paramedic_id)
 
 
 class GetEventById(Resource):
@@ -49,10 +49,17 @@ class ParamedicByDistance(Resource):
         return get_paramedics_in_distance(es_client, lat, lon, distance)
 
 
-# TODO: update object query
 class UpdateObject(Resource):
     def post(self, object_type, object_id):
         json_data = request.get_json(force=True)
+        if object_type == 'paramedic':
+            index_name = 'paramedics'
+        elif object_type == 'event':
+            index_name = 'events'
+        else:
+            return { 'result': False }
+        result = update_doc(es_client, index_name=index_name, doc_id=object_id, update_data=json_data)
+        return { 'result': result }
 
 
 # TODO: add object query

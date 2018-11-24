@@ -40,3 +40,8 @@ def get_object(es_client, index_name, object_index):
     }
     results = es_client.search(index=index_name, body=query).get('hits', {}).get('hits', {})
     return results
+
+
+def update_doc(es_client, index_name, doc_id, update_data):
+    result = es_client.update(index=index_name, id=doc_id, body=update_data)
+    return result.get('result', False)
