@@ -75,7 +75,7 @@ export default {
     display: flex;
     flex-direction: column;
     &__head {
-      background: linear-gradient(to right, $ligher-blue, $blue);
+      background: linear-gradient(to right, $lighter-blue, $blue);
       flex: 0 0 auto;
       display: flex;
       align-items: center;
