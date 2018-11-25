@@ -22,6 +22,7 @@ EVENTS_INDEX_SETTINGS = {
         'event': {
             'properties': {
                 'location': { 'type': 'geo_point' },
+                'address': { 'type': 'text' },
                 'timestamp': { 'type': 'date' },
                 'status': { 'type': 'text' },
                 'event_type': { 'type': 'text' },

@@ -63,11 +63,12 @@ def generate_paramedic():
 def generate_event():
     timestamp = datetime.datetime.now() + datetime.timedelta(seconds=random.randint(-3600,3600));
     event = {
-        "location" : generate_location(),
-        "status" : "default",
-        "event_type" : random.choice(["heart attack","accident","epilepsy","choking","haemorrhage","fracture"]),
-        "description" : "",
-        "timestamp" : timestamp
+        "location": generate_location(),
+        "address": "",
+        "status": "default",
+        "event_type": random.choice(["heart attack","accident","epilepsy","choking","haemorrhage","fracture"]),
+        "description": "",
+        "timestamp": timestamp
     }
     return event
 
@@ -110,10 +111,10 @@ for _ in range(0, 32):
         data_json=generate_paramedic()
     )
 
-for _ in range(0, 5):
-    post_to_elastic(
-        es_client=es_client,
-        index_name=EVENTS_INDEX,
-        doc_type=EVENT_DOC_TYPE,
-        data_json=generate_event()
-    )
+# for _ in range(0, 5):
+#     post_to_elastic(
+#         es_client=es_client,
+#         index_name=EVENTS_INDEX,
+#         doc_type=EVENT_DOC_TYPE,
+#         data_json=generate_event()
+#     )

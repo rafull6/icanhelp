@@ -1,10 +1,21 @@
 <template>
+<div style="display: contents">
   <div id="map"></div>
+  <div id="content" class="tooltip">
+    <img class="tooltip__avatar" src="@/assets/volunteer.png"/>
+    <h3 class="tooltip__name">Adam Cuban</h3>
+    <span class="tooltip__age">32 lata</span>
+    <span class="tooltip__specjalization">Strażak</span>
+    <button class="tooltip__button">Zadzwoń</button>
+  </div>
+</div>
 </template>
 
 <script>
 import { style, icons } from "@/utils/map.js";
 import { geo } from "@/utils/geolocation.js";
+import { definePopupClass } from './Popup.js';
+
 
 export default {
   name: "Map",
@@ -14,11 +25,13 @@ export default {
     events: {},
     map: null,
     marker: null,
+    tooltip: null,
     events: null,
     paramedics: null,
   }),
   methods: {
     createMarker: function(user, map) {
+      const that = this;
       const options = {
         position: new google.maps.LatLng(
           user._source.location.lat,
@@ -38,6 +51,9 @@ export default {
         }
       }
       const marker = new google.maps.Marker(options);
+      marker.addListener('click', function(event) {
+        that.tooltip.setPosition(new google.maps.LatLng(user._source.location.lat, user._source.location.lon));
+      });
     },
     getLocation: function() {
       this.myLocation = geo.passive;
@@ -50,6 +66,7 @@ export default {
       }
     },
     renderMap: function() {
+      const Popup = definePopupClass();
       const that = this;
       const mapOptions = {
         zoom: parseInt(this.zoom, 10),
@@ -70,6 +87,9 @@ export default {
         title: 'default',
         map: this.map
       });
+
+      this.tooltip = new Popup(new google.maps.LatLng(geo.passive.lat, geo.passive.lng),document.getElementById('content'));
+      this.tooltip.setMap(this.map);
 
       const input = document.getElementById('search-box');
       if(input){
@@ -160,8 +180,11 @@ export default {
     background: linear-gradient(to bottom, #275381, #1f466f);
     width: 174px;
     text-align: center;
-    position: relative;
-    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    display: none;
     &:after {
       background: $lighter-blue;
       width: 20px;
@@ -179,7 +202,7 @@ export default {
 
     &__avatar {
       display: block;
-      margin: 0 auto 20px;
+      margin: -55px auto 20px;
     }
 
     &__name {
