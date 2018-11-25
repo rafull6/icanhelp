@@ -7,7 +7,7 @@ Bartosz Wilk
 Bartosz Gaj
 Łukasz Wróbel
 
-##Idea
+## Idea
 **Problem:** Ambulances very often do not have the ability to quickly reach the
 the injured person. The profession of a lifeguard is becoming less and less popular.
 People more and more often think selfishly and do not look at other people's harm
@@ -16,14 +16,14 @@ People more and more often think selfishly and do not look at other people's har
 
 **Solution:** We offer an application that supports emergency medical services and promotes ancillary activities among people. Thanks to it, we get people used to subject of first aid, and our heroes prove that helping is great.
 
-#Our mission is to connect people who need help with people who know how and want to give it.
+# Our mission is to connect people who need help with people who know how and want to give it.
 
-##Technology stack
+## Technology stack
 
-#Frontend
+# Frontend
 Kibana, Vue.js, GoogleMap
 
-#Backend
+# Backend
 Python(RESTful API)
 ElasticSearch
 
