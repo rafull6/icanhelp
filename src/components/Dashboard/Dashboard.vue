@@ -24,7 +24,6 @@ export default {
       .get(`${apiUrl}/list/events`)
       .then(response => {
         this.events = response.data;
-        this.mapAdresses(response.data);
       })
       .catch(e => console.log(e));
     },
