@@ -12,12 +12,12 @@
           <a v-on:click.prevent="hideTiles()" href="">Wróć do widoku mapy</a>
         </div>
         <ul class="types__tiles">
-          <li v-on:click="submitType($event)">Zawał serca<img src="@/assets/types/type1.png"/></li>
-          <li v-on:click="submitType($event)">Wypadek<img src="@/assets/types/type2.png"/></li>
-          <li v-on:click="submitType($event)">Atak padaczki<img src="@/assets/types/type3.png"/></li>
-          <li v-on:click="submitType($event)">Zadławienia<img src="@/assets/types/type4.png"/></li>
-          <li v-on:click="submitType($event)">Krwotoki<img src="@/assets/types/type5.png"/></li>
-          <li v-on:click="submitType($event)">Złamania<img src="@/assets/types/type6.png"/></li>
+          <li v-on:click="submitType('heart attack', $event)">Zawał serca<img src="@/assets/types/type1.png"/></li>
+          <li v-on:click="submitType('accident', $event)">Wypadek<img src="@/assets/types/type2.png"/></li>
+          <li v-on:click="submitType('epilepsy', $event)">Atak padaczki<img src="@/assets/types/type3.png"/></li>
+          <li v-on:click="submitType('choking', $event)">Zadławienia<img src="@/assets/types/type4.png"/></li>
+          <li v-on:click="submitType('haemorrhage', $event)">Krwotoki<img src="@/assets/types/type5.png"/></li>
+          <li v-on:click="submitType('fracture', $event)">Złamania<img src="@/assets/types/type6.png"/></li>
         </ul>
       </div>
     </div>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Map from './Map.vue';
 
 export default {
@@ -34,6 +35,7 @@ export default {
   },
   data: () => ({
     address: null,
+    type: null,
     tilesVisible: false
   }),
   methods: {
@@ -45,8 +47,24 @@ export default {
     hideTiles: function(){
       this.tilesVisible = false;
     },
-    submitType: function(event) {
+    submitType: function(type, event) {
       this.tilesVisible = false;
+      axios
+        .post(`http://10.250.195.40:5000/add/event`, JSON.stringify({
+          location: {
+            lat: this.address.geometry.location.lat(),
+            lon: this.address.geometry.location.lng()
+          },
+          status: 'default',
+          event_type: type,
+          address: this.address.formatted_address,
+          description: '',
+          timestamp: '2018-11-24T21:21:23.992203'
+        }))
+        .then(response => {
+          console.log(response);
+        })
+        .catch(e => console.log(e));
     },
     setAddress: function(address){
       this.address = address;

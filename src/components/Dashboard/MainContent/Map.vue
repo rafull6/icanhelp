@@ -1,5 +1,14 @@
 <template>
+<div style="display: contents">
   <div id="map"></div>
+  <div id="content" class="tooltip">
+    <img class="tooltip__avatar" src="@/assets/volunteer.png"/>
+    <h3 class="tooltip__name">Adam Cuban</h3>
+    <span class="tooltip__age">32 lata</span>
+    <span class="tooltip__specjalization">Strażak</span>
+    <button class="tooltip__button">Zadzwoń</button>
+  </div>
+</div>
 </template>
 
 <script>
@@ -7,6 +16,8 @@ import axios from "axios";
 import { style, icons } from "@/utils/map.js";
 import { geo } from "@/utils/geolocation.js";
 import { generatedData } from "@/utils/data.js";
+import { definePopupClass } from './Popup.js';
+
 
 export default {
   name: "Map",
@@ -15,13 +26,15 @@ export default {
     events: {},
     myLocation: null,
     map: null,
-    marker: null
+    marker: null,
+    tooltip: null
   }),
   methods: {
     getLocation: function(bool) {
       this.myLocation = geo.passive;
     },
     showEvents: function(events) {
+      const that = this;
       events.forEach(event => {
         const marker = new google.maps.Marker({
           position: new google.maps.LatLng(
@@ -44,8 +57,7 @@ export default {
         `;
 
         marker.addListener('click', function(event) {
-          console.log(marker);
-          // document.querySelector("#map .gm-style > div > div").appendChild(tooltip);
+          that.tooltip.setPosition(new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()));
         });
       });
     },
@@ -58,6 +70,7 @@ export default {
         .catch(e => console.log(e));
     },
     renderMap: function() {
+      const Popup = definePopupClass();
       const that = this;
       const mapOptions = {
         zoom: parseInt(this.zoom, 10),
@@ -77,6 +90,9 @@ export default {
         title: 'default',
         map: this.map
       });
+
+      this.tooltip = new Popup(new google.maps.LatLng(this.myLocation.lat, this.myLocation.lng),document.getElementById('content'));
+      this.tooltip.setMap(this.map);
 
       const input = document.getElementById('search-box');
       if(input){
@@ -180,8 +196,11 @@ export default {
     background: linear-gradient(to bottom, #275381, #1f466f);
     width: 174px;
     text-align: center;
-    position: relative;
-    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    display: none;
     &:after {
       background: $lighter-blue;
       width: 20px;
@@ -199,7 +218,7 @@ export default {
 
     &__avatar {
       display: block;
-      margin: 0 auto 20px;
+      margin: -55px auto 20px;
     }
 
     &__name {
