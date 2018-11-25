@@ -1,11 +1,11 @@
 # ICanHelp
 
-##Team
-Vlad Udovychenko
-Tomasz Spyrka
-Bartosz Wilk
-Bartosz Gaj
-Łukasz Wróbel
+## Team
+- Vlad Udovychenko
+- Tomasz Spyrka
+- Bartosz Wilk
+- Bartosz Gaj
+- Łukasz Wróbel
 
 ## Idea
 **Problem:** Ambulances very often do not have the ability to quickly reach the
