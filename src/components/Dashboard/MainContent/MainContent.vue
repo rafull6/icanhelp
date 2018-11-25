@@ -4,7 +4,7 @@
       <input type="text" placeholder="Wpisz adres wydarzenia" v-model="address"/>
       <button>Utwórz</button>
     </form>
-    <Map zoom="12" :events="this.events"/>
+    <Map zoom="12" :users="this.users"/>
     <div v-if="tilesVisible" class="types">
       <div class="types__content">
         <div class="types__head">
@@ -29,11 +29,10 @@ import Map from './Map.vue';
 
 export default {
   name: "MainContent",
-  props: ['events'],
+  props: ['users'],
   components: {
     Map
   },
-  props: ['events'],
   data: () => ({
     address: '',
     tilesVisible: false
@@ -46,12 +45,8 @@ export default {
       this.tilesVisible = false;
     },
     submitType: function(event) {
-      console.log(event);
       this.tilesVisible = false;
     }
-  },
-  created() {
-    console.log('xxxx', this.events)
   }
 };
 </script>

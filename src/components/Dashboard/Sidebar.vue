@@ -14,35 +14,42 @@
       <span>Status</span>
     </div>
     <ul class="sidebar__accidents">
-      <li>Czarnowiejska</li>
-      <li class="volunteer">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="ambulance">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="volunteer">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="ambulance">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="volunteer">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="ambulance">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="volunteer">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="ambulance">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
+      <li v-for="(event, index) in this.events" :key="index" :class="event.status">{{event._source.address}}.</li>
     </ul>
+   <!--  <ul class="sidebar__accidents">
+      <li>Czarnowiejska</li>
+      <li class="volunteer">Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+      <li class="ambulance">Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+      <li class="volunteer">Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+      <li class="ambulance">Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+      <li class="volunteer">Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+      <li class="ambulance">Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+      <li class="volunteer">Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+      <li class="ambulance">Czarnowiejska</li>
+      <li>Czarnowiejska</li>
+    </ul> -->
   </div>
 </template>
 
 <script>
 import EventBus from '@/event-bus.js';
 import Checkbox from './Checkbox';
+import { locationDecoder } from '@/utils/geolocation.js';
 
 export default {
+  name: 'Sidebar',
+  components: { Checkbox },
+  props: ['events'],
   data: () => ({
     allSelected: true,
     filters: [
@@ -52,10 +59,11 @@ export default {
       { name: 'choking', label: 'Zadławienie', checked: true },
       { name: 'blood', label: 'Krwotoki', checked: true },
       { name: 'brokens', label: 'Złamania', checked: true }
-    ]
+    ],
+    address: []
   }),
-  name: "Sidebar",
-  components: { Checkbox },
+  methods: {
+  },
   created() {
     EventBus.$on('checkbox_change', (event, id) => {
       const name = event.target.name;
@@ -66,6 +74,9 @@ export default {
         this.filters[id].checked = event.target.checked;
       }
     });
+  },
+  updated() {
+    console.log(this.events)
   }
 };
 </script>
@@ -137,6 +148,7 @@ export default {
           height: 20px;
           display: block;
           border-radius: 50%;
+          flex: 0 0 auto;
         }
 
         &:nth-child(even) {

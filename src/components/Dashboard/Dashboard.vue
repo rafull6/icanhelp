@@ -3,9 +3,9 @@
     <div class="dashboard__head">
       <img class="login__logo" alt="I Can Help" src="@/assets/logo.png"/>
     </div>
-    <div class="dashboard__body">
-      <sidebar class="dashboard__sidebar"/>
-        <MainContent v-if="!this.loading" :events="this.events" class="dashboard__main-content"/>
+    <div class="dashboard__body" v-if="!this.loading">
+      <sidebar :events="this.events" class="dashboard__sidebar"/>
+      <MainContent :users="{ambulance: this.ambulance, human: this.human}" class="dashboard__main-content"/>
     </div>
   </div>
 </template>
@@ -20,23 +20,60 @@ export default {
   name: "Dashboard",
   components: { Sidebar, MainContent },
   data: () => ({
-    events: {},
-    loading: true
+    events: [],
+    ambulance: [],
+    human: [],
+    loading: true,
   }),
   methods: {
-    getEvents: function() {
+    getUsers: function(type) {
       axios
-      .get(`${apiUrl}/list/events`)
+      .get(`${apiUrl}/list/${type}`)
       .then(response => {
-        this.events = response.data;
         this.loading = false;
-        console.log(this.loading)
+        if (type === 'events') {
+          this.mapAdresses(response.data);
+          this.events = response.data;
+        } else if (type === 'paramedics') {
+          response.data.map(item => {
+            if (item._source.type === 'ambulance') {
+              this.ambulance.push(item);
+            } else {
+              this.human.push(item);
+            }
+          })
+
+        }
       })
       .catch(e => console.log(e));
+    },
+    mapAdresses: function(events) {
+      const geocoder = new google.maps.Geocoder;
+      
+      events.forEach((event, index) => {
+        const latlng = {
+          lat: parseFloat(event._source.location.lat),
+          lng: parseFloat(event._source.location.lon)
+        };
+        geocoder.geocode({
+          'location': latlng
+        }, function (results, status) {
+          if (status === 'OK') {
+            if (results[0]) {
+              events[index]._source.address = results[0].formatted_address;
+            } else {
+              window.alert('No results found');
+            }
+          } else {
+            window.alert('Geocoder failed due to: ' + status);
+          }
+        });
+      });
     }
   },
   created() {
-    this.getEvents();
+    this.getUsers('events');
+    this.getUsers('paramedics');
   }
 };
 </script>

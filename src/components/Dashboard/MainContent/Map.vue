@@ -5,11 +5,10 @@
 <script>
 import { style, icons } from "@/utils/map.js";
 import { geo } from "@/utils/geolocation.js";
-import { generatedData } from "@/utils/data.js";
 
 export default {
   name: "Map",
-  props: ["zoom", "events"],
+  props: ["zoom", "users"],
   data: () => ({
     myLocation: null
   }),
@@ -20,24 +19,34 @@ export default {
             coordinates => (this.myLocation = coordinates)
           )
         : (this.myLocation = geo.passive);
-
-        console.log(this.myLocation)
     },
-    showEvents: function(events, map) {
-      events.forEach(event => {
-        const marker = new google.maps.Marker({
-          position: new google.maps.LatLng(
-            event._source.location.lat,
-            event._source.location.lon
-          ),
-          icon: icons[event._source.status].icon,
-          title: event._source.status,
-          map: map
-        });
+    showUsers: function(users, map) {
+      users.forEach(user => {
+        if ('status' in user) {
+          const marker = new google.maps.Marker({
+            position: new google.maps.LatLng(
+              user._source.location.lat,
+              user._source.location.lon
+            ),
+            icon: icons[user._source.status].icon,
+            title: user._source.status,
+            map: map
+          });
+        } else if (user.hasOwnProps('type')) {
+          const marker = new google.maps.Marker({
+            position: new google.maps.LatLng(
+              user._source.location.lat,
+              user._source.location.lon
+            ),
+            icon: icons[user._source.status].icon,
+            title: user._source.status,
+            map: map
+          });
+        }
       });
     },
     renderMap: function() {
-      console.log('r', this.myLocation)
+      console.log(this.users)
       const mapOptions = {
         zoom: parseInt(this.zoom, 10),
         center: new google.maps.LatLng(
@@ -48,12 +57,12 @@ export default {
       };
       const mapElement = document.getElementById("map");
       const map = new google.maps.Map(mapElement, mapOptions);
-      this.showEvents(this.events, map);
+      console.log('chuj', this.users)
+      this.showUsers(this.users, map);
     }
   },
   watch: {
     myLocation: function() {
-      console.log("myLocation", this.myLocation)
       this.renderMap();
     }
   },
