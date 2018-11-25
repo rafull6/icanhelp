@@ -1,14 +1,14 @@
 <template>
   <div class="main-content">
     <form class="main-content__search" v-on:submit.prevent="showTiles($event)">
-      <input type="text" placeholder="Wpisz adres wydarzenia" v-model="address"/>
+      <input id="search-box" type="text" placeholder="Wpisz adres wydarzenia"/>
       <button>Utwórz</button>
     </form>
-    <Map zoom="12" :users="this.users"/>
+    <Map zoom="12" :users="this.users" :setAddress="setAddress"/>
     <div v-if="tilesVisible" class="types">
       <div class="types__content">
         <div class="types__head">
-          <span class="types__address">#034: Czarnowiejska 83</span>
+          <span class="types__address">{{ address.formatted_address }}</span>
           <a v-on:click.prevent="hideTiles()" href="">Wróć do widoku mapy</a>
         </div>
         <ul class="types__tiles">
@@ -26,6 +26,7 @@
 
 <script>
 import Map from './Map.vue';
+import EventBus from '@/event-bus.js';
 
 export default {
   name: "MainContent",
@@ -34,19 +35,27 @@ export default {
     Map
   },
   data: () => ({
-    address: '',
+    address: null,
     tilesVisible: false
   }),
   methods: {
     showTiles: function(event) {
-      this.tilesVisible = true;
+      if(this.address !== null){
+        this.tilesVisible = true;
+      }
     },
     hideTiles: function(){
       this.tilesVisible = false;
     },
     submitType: function(event) {
       this.tilesVisible = false;
+    },
+    setAddress: function(address){
+      this.address = address;
     }
+  },
+  created() {
+    console.log('From MainCOntent', this.users);
   }
 };
 </script>
@@ -55,10 +64,10 @@ export default {
   .main-content {
     position: relative;
     &__search {
-      max-width: 640px;
+      max-width: 800px;
       width: 100%;
       position: absolute;
-      top: 80px;
+      top: 70px;
       left: 0;
       right: 0;
       z-index: 1;

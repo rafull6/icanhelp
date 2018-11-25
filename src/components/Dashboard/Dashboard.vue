@@ -1,12 +1,7 @@
 <template>
   <div class="dashboard">
-    <div class="dashboard__head">
-      <img class="login__logo" alt="I Can Help" src="@/assets/logo.png"/>
-    </div>
-    <div class="dashboard__body" v-if="!this.loading">
       <sidebar :events="this.events" class="dashboard__sidebar"/>
-      <MainContent :users="{ambulance: this.ambulance, human: this.human}" class="dashboard__main-content"/>
-    </div>
+      <MainContent v-if="this.paramedics && this.events" :users="{paramedics: this.paramedics, events: this.events}" class="dashboard__main-content"/>
   </div>
 </template>
 
@@ -20,32 +15,29 @@ export default {
   name: "Dashboard",
   components: { Sidebar, MainContent },
   data: () => ({
-    events: [],
-    ambulance: [],
-    human: [],
-    loading: true,
+    events: null,
+    paramedics: null,
   }),
   methods: {
-    getUsers: function(type) {
+    getEvents: function() {
       axios
-      .get(`${apiUrl}/list/${type}`)
+      .get(`${apiUrl}/list/events`)
       .then(response => {
-        this.loading = false;
-        if (type === 'events') {
-          this.mapAdresses(response.data);
-          this.events = response.data;
-        } else if (type === 'paramedics') {
-          response.data.map(item => {
-            if (item._source.type === 'ambulance') {
-              this.ambulance.push(item);
-            } else {
-              this.human.push(item);
-            }
-          })
-
-        }
+        this.events = response.data;
       })
       .catch(e => console.log(e));
+    },
+    getParamedics: function() {
+      axios
+      .get(`${apiUrl}/list/paramedics`)
+      .then(response => {
+        this.paramedics = response.data;
+      })
+      .catch(e => console.log(e));
+    },
+    initDashboard: function() {
+      this.getEvents();
+      this.getParamedics();
     },
     mapAdresses: function(events) {
       const geocoder = new google.maps.Geocoder;
@@ -72,35 +64,18 @@ export default {
     }
   },
   created() {
-    this.getUsers('events');
-    this.getUsers('paramedics');
+    this.initDashboard();
   }
 };
 </script>
 
 <style scoped lang="scss">
   .dashboard {
+    flex: 1 1 auto;
     display: flex;
-    flex-direction: column;
+    overflow: hidden;
     width: 100%;
     height: 100%;
-    &__head {
-      flex: 0 0 80px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 25px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-      position: relative;
-      z-index: 3;
-    }
-
-    &__body {
-      flex: 1 1 auto;
-      display: flex;
-      overflow: hidden;
-    }
-
     &__sidebar {
       background: #fff;
       flex: 0 0 350px;
