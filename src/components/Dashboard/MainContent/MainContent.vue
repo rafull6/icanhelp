@@ -53,9 +53,6 @@ export default {
     setAddress: function(address){
       this.address = address;
     }
-  },
-  created() {
-    console.log('From MainCOntent', this.users);
   }
 };
 </script>

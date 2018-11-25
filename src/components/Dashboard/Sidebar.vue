@@ -19,28 +19,6 @@
     <ul class="sidebar__accidents">
       <li v-for="(event, index) in this.events" :key="index" :class="event.status">{{event._source.address}}.</li>
     </ul>
-   <!--  <ul class="sidebar__accidents">
-      <li>Czarnowiejska</li>
-      <li class="volunteer">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="ambulance">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="volunteer">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="ambulance">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="volunteer">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="ambulance">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="volunteer">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-      <li class="ambulance">Czarnowiejska</li>
-      <li>Czarnowiejska</li>
-    </ul> -->
   </div>
 </template>
 

@@ -24,6 +24,7 @@ export default {
       .get(`${apiUrl}/list/events`)
       .then(response => {
         this.events = response.data;
+        this.mapAdresses(response.data);
       })
       .catch(e => console.log(e));
     },
@@ -38,29 +39,6 @@ export default {
     initDashboard: function() {
       this.getEvents();
       this.getParamedics();
-    },
-    mapAdresses: function(events) {
-      const geocoder = new google.maps.Geocoder;
-      
-      events.forEach((event, index) => {
-        const latlng = {
-          lat: parseFloat(event._source.location.lat),
-          lng: parseFloat(event._source.location.lon)
-        };
-        geocoder.geocode({
-          'location': latlng
-        }, function (results, status) {
-          if (status === 'OK') {
-            if (results[0]) {
-              events[index]._source.address = results[0].formatted_address;
-            } else {
-              window.alert('No results found');
-            }
-          } else {
-            window.alert('Geocoder failed due to: ' + status);
-          }
-        });
-      });
     }
   },
   created() {
