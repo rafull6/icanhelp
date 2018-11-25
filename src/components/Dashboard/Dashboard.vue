@@ -1,17 +1,49 @@
 <template>
   <div class="dashboard">
-    <sidebar class="dashboard__sidebar"/>
-    <MainContent class="dashboard__main-content"/>
+      <sidebar :events="this.events" class="dashboard__sidebar"/>
+      <MainContent v-if="this.paramedics && this.events" :users="{paramedics: this.paramedics, events: this.events}" class="dashboard__main-content"/>
   </div>
 </template>
 
 <script>
 import Sidebar from './Sidebar';
 import MainContent from './MainContent/MainContent.vue';
+import { apiUrl } from '@/utils/urls.js';
+import axios from "axios";
 
 export default {
   name: "Dashboard",
-  components: { Sidebar, MainContent }
+  components: { Sidebar, MainContent },
+  data: () => ({
+    events: null,
+    paramedics: null,
+  }),
+  methods: {
+    getEvents: function() {
+      axios
+      .get(`${apiUrl}/list/events`)
+      .then(response => {
+        this.events = response.data;
+        this.mapAdresses(response.data);
+      })
+      .catch(e => console.log(e));
+    },
+    getParamedics: function() {
+      axios
+      .get(`${apiUrl}/list/paramedics`)
+      .then(response => {
+        this.paramedics = response.data;
+      })
+      .catch(e => console.log(e));
+    },
+    initDashboard: function() {
+      this.getEvents();
+      this.getParamedics();
+    }
+  },
+  created() {
+    this.initDashboard();
+  }
 };
 </script>
 

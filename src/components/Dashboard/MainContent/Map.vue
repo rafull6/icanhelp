@@ -12,62 +12,54 @@
 </template>
 
 <script>
-import axios from "axios";
 import { style, icons } from "@/utils/map.js";
 import { geo } from "@/utils/geolocation.js";
-import { generatedData } from "@/utils/data.js";
 import { definePopupClass } from './Popup.js';
 
 
 export default {
   name: "Map",
-  props: ["zoom", 'setAddress'],
+  props: ["zoom", "users", "setAddress"],
   data: () => ({
-    events: {},
     myLocation: null,
+    events: {},
     map: null,
     marker: null,
-    tooltip: null
+    tooltip: null,
+    events: null,
+    paramedics: null,
   }),
   methods: {
-    getLocation: function(bool) {
-      this.myLocation = geo.passive;
-    },
-    showEvents: function(events) {
+    createMarker: function(user, map) {
       const that = this;
-      events.forEach(event => {
-        const marker = new google.maps.Marker({
-          position: new google.maps.LatLng(
-            event._source.location.lat,
-            event._source.location.lon
-          ),
-          icon: icons[event._source.status].icon,
-          title: event._source.status,
-          map: this.map
-        });
-
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.innerHTML = `
-          <img class="tooltip__avatar" src="@/assets/volunteer.png"/>
-          <h3 class="tooltip__name">Adam Cuban</h3>
-          <span class="tooltip__age">32 lata</span>
-          <span class="tooltip__specjalization">Strażak</span>
-          <button class="tooltip__button">Zadzwoń</button>
-        `;
-
-        marker.addListener('click', function(event) {
-          that.tooltip.setPosition(new google.maps.LatLng(event.latLng.lat(), event.latLng.lng()));
-        });
+      const options = {
+        position: new google.maps.LatLng(
+          user._source.location.lat,
+          user._source.location.lon
+        ),
+        title: user._source.status,
+        map: map
+      }
+      if (user._source.status) {
+        options.title = user._source.status;
+        options.icon = icons[user._source.status].icon;
+      } else if (user._source.type) {
+        options.icon = icons[user._source.type].icon;
+      }
+      const marker = new google.maps.Marker(options);
+      marker.addListener('click', function(event) {
+        that.tooltip.setPosition(new google.maps.LatLng(user._source.location.lat, user._source.location.lon));
       });
     },
-    getEvents: function() {
-      axios
-        .get(`http://10.250.195.40:5000/list/events`)
-        .then(response => {
-          this.showEvents(response.data);
-        })
-        .catch(e => console.log(e));
+    getLocation: function() {
+      this.myLocation = geo.passive;
+    },
+    showUsers: function(groups, map) {
+      for(const group in groups) {
+        groups[group].forEach(user => {
+          this.createMarker(user, map);
+        });
+      }
     },
     renderMap: function() {
       const Popup = definePopupClass();
@@ -75,8 +67,8 @@ export default {
       const mapOptions = {
         zoom: parseInt(this.zoom, 10),
         center: new google.maps.LatLng(
-          this.myLocation.lat,
-          this.myLocation.lng
+          parseFloat(geo.passive.lat),
+          parseFloat(geo.passive.lng)
         ),
         styles: style,
         mapTypeControl: false,
@@ -84,14 +76,15 @@ export default {
       };
       const mapElement = document.getElementById("map");
       this.map = new google.maps.Map(mapElement, mapOptions);
-
+      this.showUsers(this.users, this.map);
+      
       this.marker = new google.maps.Marker({
         icon: icons['default'].icon,
         title: 'default',
         map: this.map
       });
 
-      this.tooltip = new Popup(new google.maps.LatLng(this.myLocation.lat, this.myLocation.lng),document.getElementById('content'));
+      this.tooltip = new Popup(new google.maps.LatLng(geo.passive.lat, geo.passive.lng),document.getElementById('content'));
       this.tooltip.setMap(this.map);
 
       const input = document.getElementById('search-box');
@@ -102,30 +95,17 @@ export default {
 
         autocomplete.addListener('place_changed', function() {
           const place = autocomplete.getPlace();
-
           that.marker.setPosition(place.geometry.location);
           that.marker.setVisible(true);
-
           that.map.setCenter(place.geometry.location);
           that.map.setZoom(14);
-
           that.setAddress(place);
         });
       }
-
-      this.getEvents();
     }
   },
-  watch: {
-    myLocation: function() {
-      this.renderMap();
-    }
-  },
-  created() {
-    const api = document.createElement('script');
-    api.addEventListener('load', this.getLocation);
-    api.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBRFc0HsUJAA1JNf71DWH96Gs1Wdz6vb3E&libraries=places';
-    document.body.appendChild(api);
+  mounted() {
+    this.renderMap();
   }
 };
 </script>

@@ -4,7 +4,7 @@
       <input id="search-box" type="text" placeholder="Wpisz adres wydarzenia"/>
       <button>Utwórz</button>
     </form>
-    <Map zoom="12" :setAddress="setAddress"/>
+    <Map zoom="12" :users="this.users" :setAddress="setAddress"/>
     <div v-if="tilesVisible" class="types">
       <div class="types__content">
         <div class="types__head">
@@ -27,9 +27,11 @@
 <script>
 import axios from 'axios';
 import Map from './Map.vue';
+import EventBus from '@/event-bus.js';
 
 export default {
   name: "MainContent",
+  props: ['users'],
   components: {
     Map
   },
