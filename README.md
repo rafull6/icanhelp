@@ -20,25 +20,24 @@ People more and more often think selfishly and do not look at other people's har
 
 ## Technology stack
 
-# Frontend
+### Frontend
 Kibana, Vue.js, GoogleMap
 
-# Backend
+### Backend
 Python(RESTful API)
 ElasticSearch
 
 
-## Start ElasticSearch
+### Start ElasticSearch
 docker run -p 9200:9200 -it --name health-db docker.elastic.co/elasticsearch/elasticsearch:6.5.1
 
-## Start Kibana
+### Start Kibana
 docker run -it -e ELASTICSEARCH_URL=http://10.250.195.40:9200 -p 5601:5601 --name health-kibana docker.elastic.co/kibana/kibana:6.5.1
 
-## Run server
+### Run server
 Configure host adress and port
 run ./server.py with icanhelp/server/ as CWD
 
-## Start Vue
-## Project setup
+### Start Vue
 yarn install
 yarn run serve
