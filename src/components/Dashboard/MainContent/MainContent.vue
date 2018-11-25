@@ -55,10 +55,10 @@ export default {
   .main-content {
     position: relative;
     &__search {
-      max-width: 640px;
+      max-width: 800px;
       width: 100%;
       position: absolute;
-      top: 80px;
+      top: 70px;
       left: 0;
       right: 0;
       z-index: 1;
