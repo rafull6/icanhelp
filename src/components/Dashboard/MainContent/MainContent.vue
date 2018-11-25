@@ -71,6 +71,9 @@ export default {
     setAddress: function(address){
       this.address = address;
     }
+  },
+  updated() {
+    EventBus.$emit('update_map', this.users);
   }
 };
 </script>

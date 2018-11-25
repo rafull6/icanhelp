@@ -30,30 +30,14 @@ import { locationDecoder } from '@/utils/geolocation.js';
 export default {
   name: 'Sidebar',
   components: { Checkbox },
-  props: ['events'],
+  props: ['events', 'filters', 'setFilter', 'allSelected'],
   data: () => ({
-    allSelected: true,
-    filters: [
-      { name: 'heart', label: 'Zawał serca', checked: true },
-      { name: 'crush', label: 'Wypadek', checked: true },
-      { name: 'epilepsy', label: 'Atak padaczki', checked: true },
-      { name: 'choking', label: 'Zadławienie', checked: true },
-      { name: 'blood', label: 'Krwotoki', checked: true },
-      { name: 'brokens', label: 'Złamania', checked: true }
-    ],
     address: []
   }),
-  methods: {
-  },
   created() {
     EventBus.$on('checkbox_change', (event, id) => {
       const name = event.target.name;
-      if(name === 'all'){
-        this.allSelected = event.target.checked;
-        this.filters.forEach(filter => filter.checked = event.target.checked);
-      }else{
-        this.filters[id].checked = event.target.checked;
-      }
+      this.setFilter(name, id, event);
     });
   },
 };

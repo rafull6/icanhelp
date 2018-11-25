@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import EventBus from '@/event-bus.js';
 import { style, icons } from "@/utils/map.js";
 import { geo } from "@/utils/geolocation.js";
 import { definePopupClass } from './Popup.js';
@@ -22,12 +23,9 @@ export default {
   props: ["zoom", "users", "setAddress"],
   data: () => ({
     myLocation: null,
-    events: {},
     map: null,
     marker: null,
-    tooltip: null,
-    events: null,
-    paramedics: null,
+    tooltip: null
   }),
   methods: {
     createMarker: function(user, map) {
@@ -52,6 +50,7 @@ export default {
       }
       const marker = new google.maps.Marker(options);
       marker.addListener('click', function(event) {
+        if(!document.getElementById('content')) return;
         that.tooltip.setPosition(new google.maps.LatLng(user._source.location.lat, user._source.location.lon));
       });
     },
@@ -128,8 +127,10 @@ export default {
         map: this.map
       });
 
-      this.tooltip = new Popup(new google.maps.LatLng(geo.passive.lat, geo.passive.lng),document.getElementById('content'));
-      this.tooltip.setMap(this.map);
+      if(document.getElementById('content')) {
+        this.tooltip = new Popup(new google.maps.LatLng(geo.passive.lat, geo.passive.lng),document.getElementById('content'));
+        this.tooltip.setMap(this.map);
+      }
 
       const input = document.getElementById('search-box');
       if(input){
@@ -151,6 +152,11 @@ export default {
   mounted() {
     console.log(this.users)
     this.renderMap();
+  },
+  created(){
+    EventBus.$on('update_map', users => {
+      this.renderMap();
+    });
   }
 };
 </script>
