@@ -28,17 +28,23 @@ Python(RESTful API)
 ElasticSearch
 
 ## To start:
-
+### You need to have installed
+- yarn / npm
+- pip
+- docker
+- Vue.js
+- Python3.5 with libraries elasticsearch flask flask-jsonpify flask-sqlalchemy flask-restful flask-corse
 ### Start ElasticSearch
 docker run -p 9200:9200 -it --name health-db docker.elastic.co/elasticsearch/elasticsearch:6.5.1
 
 ### Start Kibana
-docker run -it -e ELASTICSEARCH_URL=http://0.0.0.0:9200 -p 5601:5601 --name health-kibana docker.elastic.co/kibana/kibana:6.5.1 - use ElasticSearch host IP
+docker run -it -e ELASTICSEARCH_URL=http://0.0.0.0:9200 -p 5601:5601 --name health-kibana docker.elastic.co/kibana/kibana:6.5.1
+ - use ElasticSearch host IP
 
 ### Run server
 Configure host adress and port
 run ./server.py with icanhelp/server/ as CWD
 
 ### Start Vue
-yarn install
-yarn run serve
+yarn install / npm install
+yarn run serve / npm run self
