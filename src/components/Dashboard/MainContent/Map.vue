@@ -10,17 +10,18 @@ import { generatedData } from "@/utils/data.js";
 
 export default {
   name: "Map",
-  props: ["zoom"],
+  props: ["zoom", 'setAddress'],
   data: () => ({
     events: {},
-    myLocation: null
+    myLocation: null,
+    map: null,
+    marker: null
   }),
   methods: {
     getLocation: function(bool) {
       this.myLocation = geo.passive;
     },
-    showEvents: function(events, map) {
-      console.log('events', events)
+    showEvents: function(events) {
       events.forEach(event => {
         const marker = new google.maps.Marker({
           position: new google.maps.LatLng(
@@ -29,7 +30,7 @@ export default {
           ),
           icon: icons[event._source.status].icon,
           title: event._source.status,
-          map: map
+          map: this.map
         });
 
         const tooltip = document.createElement('div');
@@ -48,15 +49,16 @@ export default {
         });
       });
     },
-    getEvents: function(map) {
+    getEvents: function() {
       axios
         .get(`http://10.250.195.40:5000/list/events`)
         .then(response => {
-          this.showEvents(response.data, map);
+          this.showEvents(response.data);
         })
         .catch(e => console.log(e));
     },
     renderMap: function() {
+      const that = this;
       const mapOptions = {
         zoom: parseInt(this.zoom, 10),
         center: new google.maps.LatLng(
@@ -64,12 +66,38 @@ export default {
           this.myLocation.lng
         ),
         styles: style,
+        mapTypeControl: false,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
       const mapElement = document.getElementById("map");
-      const map = new google.maps.Map(mapElement, mapOptions);
+      this.map = new google.maps.Map(mapElement, mapOptions);
 
-      this.getEvents(map);
+      this.marker = new google.maps.Marker({
+        icon: icons['default'].icon,
+        title: 'default',
+        map: this.map
+      });
+
+      const input = document.getElementById('search-box');
+      if(input){
+        const options = { componentRestrictions: {country: 'pl'} };
+        const autocomplete = new google.maps.places.Autocomplete(input, options);
+        autocomplete.bindTo('bounds', this.map);
+
+        autocomplete.addListener('place_changed', function() {
+          const place = autocomplete.getPlace();
+
+          that.marker.setPosition(place.geometry.location);
+          that.marker.setVisible(true);
+
+          that.map.setCenter(place.geometry.location);
+          that.map.setZoom(14);
+
+          that.setAddress(place);
+        });
+      }
+
+      this.getEvents();
     }
   },
   watch: {
@@ -80,7 +108,7 @@ export default {
   created() {
     const api = document.createElement('script');
     api.addEventListener('load', this.getLocation);
-    api.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBRFc0HsUJAA1JNf71DWH96Gs1Wdz6vb3E';
+    api.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBRFc0HsUJAA1JNf71DWH96Gs1Wdz6vb3E&libraries=places';
     document.body.appendChild(api);
   }
 };

@@ -1,14 +1,14 @@
 <template>
   <div class="main-content">
     <form class="main-content__search" v-on:submit.prevent="showTiles($event)">
-      <input type="text" placeholder="Wpisz adres wydarzenia" v-model="address"/>
+      <input id="search-box" type="text" placeholder="Wpisz adres wydarzenia"/>
       <button>Utwórz</button>
     </form>
-    <Map zoom="12"/>
+    <Map zoom="12" :setAddress="setAddress"/>
     <div v-if="tilesVisible" class="types">
       <div class="types__content">
         <div class="types__head">
-          <span class="types__address">#034: Czarnowiejska 83</span>
+          <span class="types__address">{{ address.formatted_address }}</span>
           <a v-on:click.prevent="hideTiles()" href="">Wróć do widoku mapy</a>
         </div>
         <ul class="types__tiles">
@@ -33,19 +33,23 @@ export default {
     Map
   },
   data: () => ({
-    address: '',
+    address: null,
     tilesVisible: false
   }),
   methods: {
     showTiles: function(event) {
-      this.tilesVisible = true;
+      if(this.address !== null){
+        this.tilesVisible = true;
+      }
     },
     hideTiles: function(){
       this.tilesVisible = false;
     },
     submitType: function(event) {
-      console.log(event);
       this.tilesVisible = false;
+    },
+    setAddress: function(address){
+      this.address = address;
     }
   }
 };
