@@ -1,5 +1,8 @@
 <template>
   <div class="sidebar">
+    <div class="sidebar__header">
+      <img class="login__logo" alt="I Can Help" src="@/assets/logo.png"/>
+    </div>
     <div class="sidebar__head">
       <h2>Filtry</h2>
       <checkbox name="all" label="Zaznacz wszystkie" :checked="allSelected" type="white"/>
@@ -74,6 +77,15 @@ export default {
   .sidebar {
     display: flex;
     flex-direction: column;
+    &__header {
+      background: #fff;
+      flex: 0 0 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 25px;
+    }
+
     &__head {
       background: linear-gradient(to right, $lighter-blue, $blue);
       flex: 0 0 auto;
