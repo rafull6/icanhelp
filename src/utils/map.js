@@ -165,7 +165,7 @@ export const icons = {
       path: "M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0",
       fillColor: "orange",
       fillOpacity: 1,
-      scale: 0.15
+      scale: 0.1
     }
   },
   car: {
@@ -173,7 +173,7 @@ export const icons = {
       path: "M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0",
       fillColor: "violet",
       fillOpacity: 1,
-      scale: 0.15
+      scale: 0.1
     }
   }
 };

@@ -31,7 +31,11 @@ export default {
         options.title = user._source.status;
         options.icon = icons[user._source.status].icon;
       } else if (user._source.type) {
-        options.icon = icons[user._source.type].icon;
+        if (user._source.type === 'ambulance') {
+          options.icon = icons['car'].icon;
+        }else if(user._source.type === 'human') {
+          options.icon = icons['human'].icon;
+        }
       }
       const marker = new google.maps.Marker(options);
     },
