@@ -27,12 +27,13 @@ Kibana, Vue.js, GoogleMap
 Python(RESTful API)
 ElasticSearch
 
+## To start:
 
 ### Start ElasticSearch
 docker run -p 9200:9200 -it --name health-db docker.elastic.co/elasticsearch/elasticsearch:6.5.1
 
 ### Start Kibana
-docker run -it -e ELASTICSEARCH_URL=http://10.250.195.40:9200 -p 5601:5601 --name health-kibana docker.elastic.co/kibana/kibana:6.5.1
+docker run -it -e ELASTICSEARCH_URL=http://0.0.0.0:9200 -p 5601:5601 --name health-kibana docker.elastic.co/kibana/kibana:6.5.1 - use ElasticSearch host IP
 
 ### Run server
 Configure host adress and port
