@@ -4,7 +4,7 @@
       <img class="app__logo" alt="I Can Help" src="@/assets/logo.png"/>
     </div>
     <div class="app__map">
-      <Map zoom="11"/>
+      <Map zoom="11" v-if="this.paramedics && this.events" :users="{paramedics: this.paramedics, events: this.events}" />
     </div>
     <div class="app__info">
       <div>
@@ -28,10 +28,51 @@
 
 <script>
 import Map from '../Dashboard/MainContent/Map.vue';
+import axios from "axios";
+import { apiUrl } from '@/utils/urls.js';
 
 export default {
   name: "Mobile",
-  components: { Map }
+  components: { Map },
+    data: () => ({
+    events: null,
+    paramedics: null,
+    allSelected: true,
+  }),
+  methods: {
+    getEvents: function() {
+      axios
+      .get(`${apiUrl}/list/events`)
+      .then(response => {
+        this.events = response.data;
+      })
+      .catch(e => console.log(e));
+    },
+    getParamedics: function() {
+      axios
+      .get(`${apiUrl}/list/paramedics`)
+      .then(response => {
+        this.paramedics = response.data;
+      })
+      .catch(e => console.log(e));
+    },
+    initDashboard: function() {
+      this.getEvents();
+      this.getParamedics();
+    },
+    setFilter(name, id, event){
+      if(name === 'all'){
+        this.allSelected = event.target.checked;
+        this.filters.forEach(filter => filter.checked = event.target.checked);
+      }else{
+        this.filters[id].checked = event.target.checked;
+      }
+      this.getEvents();
+    }
+  },
+  created() {
+    this.initDashboard();
+  }
 };
 </script>
 
