@@ -55,6 +55,42 @@ export default {
         that.tooltip.setPosition(new google.maps.LatLng(user._source.location.lat, user._source.location.lon));
       });
     },
+    linkUsers: function(users, directionsDisplay, directionsService) {
+      users.paramedics.map(paramedic => {
+        if (paramedic._source.event_id.length) {
+          const paramedicFk = paramedic._source.event_id;
+          users.events.map(event => {
+            // const paramedicPos = new google.maps.LatLng(paramedic._source.location.lat, paramedic._source.location.lon);
+            // const eventPos = new google.maps.LatLng(event._source.location.lat, event._source.location.lon);
+            
+            const paramedicPos = {lat: paramedic._source.location.lat, lng: paramedic._source.location.lon};
+            const eventPos = {lat: event._source.location.lat, lng: event._source.location.lon};
+            // const eventPos = new google.maps.LatLng(52.18161019999999, 21.026894399999946);
+            console.log('x', event._source.location.lat)
+            console.log('d', paramedicPos)
+            if (event._id === paramedicFk) {
+              this.createRoute(paramedicPos, eventPos, directionsDisplay, directionsService);
+            }
+          })
+}
+      })
+    },
+    createRoute: function(start, end, directionsDisplay, directionsService) {
+       directionsService.route({
+        origin: start,
+        destination: end,
+        travelMode: 'DRIVING'
+      }, function(response, status) {
+        console.log(status);
+        console.log(response)
+        if (status == 'OK') {
+          directionsDisplay.setDirections(response);
+          console.log(response);
+        } else {
+          window.alert('Directions request failed due to ' + status);
+        }
+      });
+    },
     getLocation: function() {
       this.myLocation = geo.passive;
     },
@@ -79,8 +115,12 @@ export default {
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
       const mapElement = document.getElementById("map");
+      var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
+      var directionsService = new google.maps.DirectionsService;
       this.map = new google.maps.Map(mapElement, mapOptions);
+      directionsDisplay.setMap(this.map);
       this.showUsers(this.users, this.map);
+      this.linkUsers(this.users, directionsDisplay, directionsService);
       
       this.marker = new google.maps.Marker({
         icon: icons['default'].icon,
@@ -109,6 +149,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.users)
     this.renderMap();
   }
 };
