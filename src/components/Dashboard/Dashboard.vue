@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-      <sidebar :events="this.events" class="dashboard__sidebar"/>
+      <sidebar :events="this.events" :filters="filters" :setFilter="setFilter" :allSelected="allSelected" class="dashboard__sidebar"/>
       <MainContent v-if="this.paramedics && this.events" :users="{paramedics: this.paramedics, events: this.events}" class="dashboard__main-content"/>
   </div>
 </template>
@@ -17,13 +17,24 @@ export default {
   data: () => ({
     events: null,
     paramedics: null,
+    allSelected: true,
+    filters: [
+      { name: 'heart attack', label: 'Zawał serca', checked: true },
+      { name: 'accident', label: 'Wypadek', checked: true },
+      { name: 'epilepsy', label: 'Atak padaczki', checked: true },
+      { name: 'choking', label: 'Zadławienie', checked: true },
+      { name: 'haemorrhage', label: 'Krwotoki', checked: true },
+      { name: 'fracture', label: 'Złamania', checked: true }
+    ]
   }),
   methods: {
     getEvents: function() {
       axios
       .get(`${apiUrl}/list/events`)
       .then(response => {
-        this.events = response.data;
+        this.events = response.data.filter(event => {
+          return this.filters.filter(filter => filter.checked).map(filter => filter.name).includes(event._source.event_type);
+        });
       })
       .catch(e => console.log(e));
     },
@@ -38,6 +49,15 @@ export default {
     initDashboard: function() {
       this.getEvents();
       this.getParamedics();
+    },
+    setFilter(name, id, event){
+      if(name === 'all'){
+        this.allSelected = event.target.checked;
+        this.filters.forEach(filter => filter.checked = event.target.checked);
+      }else{
+        this.filters[id].checked = event.target.checked;
+      }
+      this.getEvents();
     }
   },
   created() {
