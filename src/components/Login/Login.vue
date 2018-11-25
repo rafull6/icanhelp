@@ -1,42 +1,62 @@
 <template>
   <div class="login">
-    <img class="login__logo" alt="I Can Help" src="@/assets/logo.png" />
-    <div class="login__content">
-      <form-field label='E-mail' type='email' placeholder='Wpisz swój e-mail'/>
-      <form-field label='Hasło' type='password' placeholder='Wpisz swoje hasło'/>
+    <img class="login__bg" src="@/assets/bg.jpg"/>
+    <form class="login__content" v-on:submit="goToDashboard($event)">
+      <img class="login__logo" alt="I Can Help" src="@/assets/big-logo.png"/>
+      <form-field label='E-mail' name='email' type='email' placeholder='Wpisz swój e-mail'/>
+      <form-field label='Hasło' name='password' type='password' placeholder='Wpisz swoje hasło'/>
       <blue-button class="login__button">Zaloguj się</blue-button>
       <div class="login__links">
         <a class="login__remind-password" href="">Zapomniałeś hasła?</a><br>
         <a class="login__register" href="">Załóż konto</a>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 
 <script>
+import router from '../../router';
 import FormField from './FormField';
 import Button from './Button';
 
 export default {
   name: "Login",
-  components: { FormField, BlueButton: Button }
+  components: { FormField, BlueButton: Button },
+  methods: {
+    goToDashboard: function(event){
+      event.preventDefault();
+      const { email, password } = event.target;
+
+      if(email.value === 'admin@admin.com' && password.value === 'admin'){
+        router.push('/');
+      }
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
   .login {
-    background: url(~/assets/bg.jpg) no-repeat center center;
-    background-size: cover;
     position: relative;
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    &__logo {
+    &__bg {
       position: absolute;
-      left: 40px;
-      top: 30px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      z-index: -1;
+    }
+
+    &__logo {
+      display: block;
+      margin: 0 auto 30px;
     }
 
     &__content {
